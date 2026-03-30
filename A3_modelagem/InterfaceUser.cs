@@ -2,18 +2,37 @@
 {
     internal class InterfaceUser
     {
-        //retorna uma tupla
-        public virtual (string, string) InterfaceLogin()
+        
+        public User InterfaceCadastroUser()
         {
-            string username, password;
+            string username, password, email;
             Console.WriteLine("\n---------------------");
+            Console.WriteLine("ID enquanto não tem banco de dados: ");
+            string idString = Console.ReadLine()!;
+            if (!int.TryParse(idString, out int id))
+            {
+                Console.WriteLine("ERRO de parse");
+            }
+            Console.WriteLine("Insira seu email: ");
+            email = Console.ReadLine()!;
             Console.WriteLine("Insira seu usuário: ");
             username = Console.ReadLine()!;
             Console.WriteLine("Insira sua senha: ");
             password = Console.ReadLine()!;
+
+            return new User(id, username, email, password);
+        }
+        public virtual (string, string) InterfaceLogin()
+        {
+            string username, password;
+            Console.WriteLine("Digite seu usuario: ");
+            username = Console.ReadLine()!;
+            Console.WriteLine("Digite sua senha: ");
+            password = Console.ReadLine()!;
             return (username, password);
         }
-        public static void InterfaceMenu()
+
+        public void InterfaceMenu()
         {
             Console.WriteLine("\n---------------------");
             Console.WriteLine("1 - Ver vídeos");

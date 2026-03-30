@@ -6,9 +6,10 @@ public class Program
     static BancoDeDados bd = new BancoDeDados();
     static InterfaceEditor interfaceEditor = new InterfaceEditor();
     static InterfaceUser interfaceUsuario = new InterfaceUser();
-    static bool isRun = true;
+    
     public static void Main()
     {
+        bool isRun = true;
         while (isRun)
         {
             MenuDeEntrada();
@@ -21,10 +22,17 @@ public class Program
                     Console.WriteLine("Saindo do sistema...");
                     isRun = false;
                     break;
+
                 case 1:
-                    Editor editor = interfaceEditor.InterfaceCadastroEditor();
-                    bd.Editores.Add(editor);
+                    Editor editorT = interfaceEditor.InterfaceCadastroEditor();
+                    bd.Editores.Add(editorT);
                     break;
+
+                case 2:
+                    User userT = interfaceUsuario.InterfaceCadastroUser();
+                    bd.Usuarios.Add(userT);
+                    break;
+
                 case 3:
                     if (bd.Editores.Count == 0) break;
                     (string user, string password) = interfaceEditor.InterfaceLogin();
@@ -32,12 +40,53 @@ public class Program
                     {
                         if (ed.UserName == user && ed.Password == password)
                         {
+                            bool isLoggedIn = true;
                             Console.WriteLine("Login bem-sucedido como editor!");
-                            //logica depois do login ->
+                            do { 
                             interfaceEditor.InterfaceMenuEditor();
+                            string escolhastr = Console.ReadLine()!;
+                            int escolhaEditor = ParsearEscolha(escolhastr);           
+                                switch (escolhaEditor)
+                                {
+                                case 0:
+                                    Console.WriteLine("Saindo do menu de editor...");
+                                    isLoggedIn = false;
+                                    break;
+                                case 1:
+                                    Videos video = interfaceEditor.InterfaceUploadVideo(ed);
+                                    Console.WriteLine("\n Video upado com sucesso");
+                                    break;
+                                case 2:
+                                    //livechat pov editor
+                                    break;
+                                default:
+                                    Console.WriteLine("Escolha inválida. Saindo do menu de editor...");
+                                    break;
+                                }
+                            }while(isLoggedIn);
                         }
                         else { Console.WriteLine("Usuario ou senha incorretos"); }
                     } 
+                    break;
+                case 4:
+                    if(bd.Usuarios.Count == 0) break;
+                    (string userU, string passwordU) = interfaceUsuario.InterfaceLogin();
+                    foreach (User us in bd.Usuarios)
+                    {
+                        if (us.UserName == userU && us.Password == passwordU)
+                        {
+                            Console.WriteLine("Login bem-sucedido como usuário!");
+                            interfaceUsuario.InterfaceMenu();
+                            //logica depois do login ->
+                        }
+                        else { Console.WriteLine("Usuario ou senha incorretos"); }
+                    }
+
+                    break;
+
+                default:
+                    Console.WriteLine("CRITICAL ERROR");
+                    isRun = false;
                     break;
             }
         }
