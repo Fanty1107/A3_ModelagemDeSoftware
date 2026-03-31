@@ -6,9 +6,11 @@ public class Program
     static BancoDeDados bd = new BancoDeDados();
     static InterfaceEditor interfaceEditor = new InterfaceEditor();
     static InterfaceUser interfaceUsuario = new InterfaceUser();
-    
+
     public static void Main()
     {
+
+        bool isLoggedIn = true;
         bool isRun = true;
         while (isRun)
         {
@@ -39,8 +41,7 @@ public class Program
                     foreach (Editor ed in bd.Editores)
                     {
                         if (ed.UserName == user && ed.Password == password)
-                        {
-                            bool isLoggedIn = true;
+                        {                            
                             Console.WriteLine("Login bem-sucedido como editor!");
                             do { 
                             interfaceEditor.InterfaceMenuEditor();
@@ -54,13 +55,22 @@ public class Program
                                     break;
                                 case 1:
                                     Videos video = interfaceEditor.InterfaceUploadVideo(ed);
+                                    bd.Videos.Add(video);
                                     Console.WriteLine("\n Video upado com sucesso");
                                     break;
-                                case 2:
-                                    //livechat pov editor
-                                    break;
+                                case 2:                               
+                                        Console.WriteLine("\nDigite a mensagem que deseja enviar para o usuário");
+                                        string mensagem = Console.ReadLine()!;
+                                        LiveChat liveChat = new LiveChat(ed, mensagem, DateTime.Now);
+                                        liveChat.SendMessage(mensagem, ed);                                       
+                                        bd.Chats.Add(liveChat);
+                                        Console.WriteLine("---------------------");
+                                        Console.WriteLine("Historico de mensagens");
+                                        liveChat.ListarMensagens(bd.Chats);
+                                        break;
                                 default:
                                     Console.WriteLine("Escolha inválida. Saindo do menu de editor...");
+                                    isLoggedIn = false;
                                     break;
                                 }
                             }while(isLoggedIn);
@@ -76,8 +86,43 @@ public class Program
                         if (us.UserName == userU && us.Password == passwordU)
                         {
                             Console.WriteLine("Login bem-sucedido como usuário!");
-                            interfaceUsuario.InterfaceMenu();
-                            //logica depois do login ->
+                            do
+                            {
+                                interfaceUsuario.InterfaceMenu();
+                                string escolhastr = Console.ReadLine()!;
+                                int escolhaUsuario = ParsearEscolha(escolhastr);
+                                switch (escolhaUsuario)
+                                {
+                                    case 0:
+                                        Console.WriteLine("Saindo do menu de usuário...");
+                                        isLoggedIn = false;
+                                        break;
+                                    case 1:
+                                        
+                                        if(bd.Videos.Count == 0)
+                                        {
+                                            Console.WriteLine("Nenhum video disponivel");
+                                            break;
+                                        }
+                                        else { interfaceUsuario.InterfaceVideos(bd.Videos); }                                          
+                                        break;
+                                    case 2:                                        
+                                        Console.WriteLine("\nDigite a mensagem que deseja enviar para o editor");
+                                        string mensagem = Console.ReadLine()!;
+                                        LiveChat liveChat = new LiveChat(us, mensagem, DateTime.Now);
+                                        liveChat.SendMessage(mensagem, us);
+                                        bd.Chats.Add(liveChat);
+                                        Console.WriteLine("---------------------");
+                                        Console.WriteLine("Historico de mensagens");
+                                        liveChat.ListarMensagens(bd.Chats);
+                                        break;
+                                    default:
+                                        Console.WriteLine("Escolha inválida. Saindo do menu de usuário...");
+                                        isLoggedIn = false;
+                                        break;
+                                }
+                            } while(isLoggedIn);
+
                         }
                         else { Console.WriteLine("Usuario ou senha incorretos"); }
                     }

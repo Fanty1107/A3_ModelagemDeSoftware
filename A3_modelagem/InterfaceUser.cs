@@ -39,19 +39,18 @@
             Console.WriteLine("2 - Acessar chat ao vivo com editor");
             Console.WriteLine("0 - Sair");
         }
-        public static void InterfaceVideos(Videos video)
+        public void InterfaceVideos(List<Videos> video)
         {
-            Console.WriteLine("\n---------------------");
-            Console.WriteLine($"Título: {video.Title}");
-            Console.WriteLine($"Descrição: {video.Description}");
-            Console.WriteLine($"URL: {video.Url}");
-            Console.WriteLine($"Visualizações: {video.Views}");
+            foreach(var v in video)
+            {
+                Console.WriteLine("\n---------------------");
+                Console.WriteLine($"Título: {v.Title}");
+                Console.WriteLine($"Descrição: {v.Description}");
+                Console.WriteLine($"URL: {v.Url}");
+                Console.WriteLine($"Visualizações: {v.Views}");
+            }
         }
-        public static void InterfaceChat(LiveChat chat)
-        {
-            Console.WriteLine("\n---------------------");
-            Console.WriteLine($"[{chat.Timestamp}] {chat.Sender.UserName}: {chat.Message}");
-        }
+
         public void InterfacePagamento()
         {
             Console.WriteLine("Insira os dados do cartão de crédito para pagamento:");
