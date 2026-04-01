@@ -27,15 +27,8 @@
         }
         public Editor InterfaceCadastroEditor()
         {
-            string username, password, email;
-            
+            string username, password, email; 
             Console.WriteLine("\n---------------------");
-            Console.WriteLine("ID enquanto não tem banco de dados: ");
-            string idString = Console.ReadLine()!;
-            if(!int.TryParse(idString, out int id))
-            {
-                Console.WriteLine("ERRO de parse");
-            }
             Console.WriteLine("Insira seu email: ");
             email = Console.ReadLine()!;
             Console.WriteLine("Insira seu usuário: ");
@@ -43,7 +36,7 @@
             Console.WriteLine("Insira sua senha: ");
             password = Console.ReadLine()!;
         
-            return new Editor(id,username, email, password);
+            return new Editor(username, email, password);
         }
     }
 }

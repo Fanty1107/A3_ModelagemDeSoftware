@@ -3,8 +3,8 @@
     internal class Editor : User
     {
         
-        public Editor(int id, string name, string email, string password)
-            : base(id, name, email, password) { }
+        public Editor(string name, string email, string password)
+            : base(name, email, password) { }
    
         public Editor() : base() { }
         public override void login(string username, string password)
